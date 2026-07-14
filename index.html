@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SD Creations | Video Editor</title>
+
+    <style>
+        /* BASIC */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: #050505;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* LOADER */
+        #loader {
+            position: fixed;
+            width: 100%;
+            height: 100vh;
+            background: #050505;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: .8s;
+        }
+
+        #loader img {
+            width: 180px;
+            animation: logoPulse 1.5s infinite alternate;
+        }
+
+        @keyframes logoPulse {
+            from { transform: scale(.8); opacity: .5; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        /* NAVBAR */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(0, 0, 0, .45);
+            backdrop-filter: blur(15px);
+        }
+
+        .logo {
+            width: 120px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 30px;
+            transition: .3s;
+        }
+
+        nav a:hover {
+            color: #ff6600;
+        }
+
+        /* HERO */
+        .hero {
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .hero video {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            animation: bgZoom 15s infinite alternate;
+        }
+
+        @keyframes bgZoom {
+            from { transform: scale(1); }
+            to { transform: scale(1.12); }
+        }
+
+        .overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(0, 0, 0, .9), rgba(0, 0, 0, .35));
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 0 8%;
+            max-width: 900px;
+            animation: heroShow 1.5s;
+        }
+
+        @keyframes heroShow {
+            from { opacity: 0; transform: translateY(80px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero h1 {
+            font-size: 70px;
+            line-height: 1.1;
+        }
+
+        .hero h1 span {
+            color: #ff6600;
+        }
+
+        .hero p {
+            font-size: 22px;
+            color: #ccc;
+            margin: 25px 0;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 35px;
+            border-radius: 40px;
+            border: 1px solid #ff6600;
+            color: white;
+            text-decoration: none;
+            margin-right: 15px;
+            transition: .4s;
+        }
+
+        .btn:hover {
+            background: #ff6600;
+            box-shadow: 0 0 30px #ff6600;
+            transform: translateY(-5px);
+        }
+
+        /* STATS */
+        .stats {
+            padding: 80px 8%;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+        }
+
+        .stat-box {
+            background: #111;
+            padding: 35px;
+            text-align: center;
+            border-radius: 20px;
+            border: 1px solid #222;
+            transition: .5s;
+        }
+
+        .stat-box:hover {
+            transform: translateY(-10px);
+            border-color: #ff6600;
+            box-shadow: 0 0 30px rgba(255, 102, 0, .3);
+        }
+
+        .stat-box h2 {
+            font-size: 45px;
+            color: #ff6600;
+        }
+
+        .stat-box p {
+            color: #aaa;
+            margin-top: 10px;
+        }
+
+        /* ABOUT ME SECTION */
+        .about-me {
+            padding: 100px 8%;
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            background: #080808;
+        }
+
+        .about-img-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            position: relative;
+        }
+
+        .about-img-wrapper {
+            position: relative;
+            width: 350px;
+            height: 450px;
+        }
+
+        .about-img-wrapper img.profile-pic {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 20px;
+            border: 2px solid #ff6600;
+            box-shadow: 0 0 30px rgba(255, 102, 0, 0.25);
+            filter: brightness(0.9) contrast(1.2) saturate(1.05); 
+            transition: 0.5s ease;
+        }
+
+        /* 🌟 ANIMATED GLOWING CAPCUT BADGE USING REAL IMAGE */
+        .capcut-badge {
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #000000, #141414);
+            color: white;
+            padding: 10px 22px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 2px solid #ff6600;
+            white-space: nowrap;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 12px; /* Icon එක සහ ටෙක්ස්ට් එක අතර පරතරය */
+            
+            /* Pulsing & Glowing Animation */
+            animation: badgePulseGlow 2s infinite ease-in-out;
+            transition: 0.5s ease;
+        }
+
+        /* CapCut PNG Image Icon Animation */
+        .capcut-badge img.capcut-icon {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+            border-radius: 6px; /* PNG එක වටේ පොඩි curve එකක් ගන්න */
+            filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.6)); /* Image එක වටේ පොඩි එළියක් */
+            animation: iconWiggle 3s infinite ease-in-out;
+            transform-origin: center;
+            transition: 0.3s ease;
+        }
+
+        /* 🔄 BADGE ANIMATION (PULSE & GLOW) */
+        @keyframes badgePulseGlow {
+            0% {
+                transform: translateX(-50%) scale(1);
+                box-shadow: 0 5px 15px rgba(255, 102, 0, 0.4);
+                border-color: #ff6600;
+            }
+            50% {
+                transform: translateX(-50%) scale(1.06);
+                box-shadow: 0 8px 25px rgba(255, 102, 0, 0.85), 0 0 15px rgba(255, 153, 0, 0.4);
+                border-color: #ff9900;
+            }
+            100% {
+                transform: translateX(-50%) scale(1);
+                box-shadow: 0 5px 15px rgba(255, 102, 0, 0.4);
+                border-color: #ff6600;
+            }
+        }
+
+        /* 🔄 PNG ICON WIGGLE (දෙපැත්තට ලස්සනට පැද්දෙනවා) */
+        @keyframes iconWiggle {
+            0% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(-12deg) scale(1.15); }
+            75% { transform: rotate(12deg) scale(1.15); }
+            100% { transform: rotate(0deg) scale(1); }
+        }
+
+        /* Hovering states */
+        .about-img-wrapper:hover img.profile-pic {
+            transform: scale(1.03);
+            filter: brightness(1.05) contrast(1.25) saturate(1.1);
+            box-shadow: 0 0 40px rgba(255, 102, 0, 0.45);
+        }
+
+        .about-img-wrapper:hover .capcut-badge {
+            animation-play-state: paused; /* Hover කරද්දී Pulse එක නවතී */
+            transform: translateX(-50%) scale(1.1) translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 102, 0, 0.95);
+            border-color: #fff;
+        }
+
+        .about-img-wrapper:hover .capcut-badge img.capcut-icon {
+            animation-play-state: paused;
+            transform: scale(1.25) rotate(5deg);
+            filter: drop-shadow(0 0 8px #ff6600);
+        }
+
+        .about-content {
+            flex: 1.2;
+        }
+
+        .about-content h3 {
+            color: #ff6600;
+            font-size: 18px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .about-content h2 {
+            font-size: 40px;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .about-content p {
+            color: #ccc;
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 25px;
+        }
+
+        /* PORTFOLIO & VIDEOS */
+        .portfolio {
+            padding: 80px 8%;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 40px;
+            margin-bottom: 30px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: #ff6600;
+            border-radius: 2px;
+        }
+
+        .filter {
+            margin-bottom: 40px;
+        }
+
+        .filter button {
+            background: #111;
+            color: white;
+            border: 1px solid #222;
+            padding: 10px 20px;
+            border-radius: 20px;
+            margin: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .filter button:hover {
+            border-color: #ff6600;
+            color: #ff6600;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            justify-content: center;
+        }
+
+        .video-card {
+            background: #111;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid #222;
+            transition: 0.4s;
+            padding-bottom: 15px;
+            text-align: center;
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+            border-color: #ff6600;
+        }
+
+        .video-card video {
+            width: 100%;
+            aspect-ratio: 9 / 16;
+            object-fit: cover;
+            border-bottom: 1px solid #222;
+            cursor: pointer;
+        }
+
+        .video-card h3 {
+            font-size: 18px;
+            margin-top: 15px;
+            color: white;
+        }
+
+        .video-card p {
+            color: #888;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .video-popup {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .video-popup video {
+            max-width: 90%;
+            max-height: 80vh;
+            border-radius: 10px;
+        }
+
+        .close-popup {
+            position: absolute;
+            top: 20px; right: 30px;
+            font-size: 40px;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* ANIMATED SERVICES SECTION */
+        .services {
+            padding: 100px 8%;
+            text-align: center;
+            background: #080808;
+        }
+
+        .services-grid {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+
+        .service-card {
+            background: #111;
+            border: 1px solid #1c1c1c;
+            padding: 40px 30px;
+            border-radius: 20px;
+            width: 320px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .service-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            border-color: #ff6600;
+            box-shadow: 0 15px 30px rgba(255, 102, 0, 0.15);
+        }
+
+        .service-icon {
+            font-size: 50px;
+            margin-bottom: 20px;
+            display: inline-block;
+            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+
+        .service-card:hover .service-icon {
+            transform: rotateY(360deg) scale(1.15);
+        }
+
+        .service-card h2 {
+            font-size: 22px;
+            color: #fff;
+            margin-bottom: 15px;
+            transition: 0.3s;
+        }
+
+        .service-card:hover h2 {
+            color: #ff6600;
+        }
+
+        .service-card p {
+            color: #aaa;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        /* PACKAGES */
+        .packages {
+            padding: 100px 8%;
+            text-align: center;
+        }
+
+        .packages-grid {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+
+        .package-card {
+            background: #111;
+            padding: 40px 30px;
+            border-radius: 20px;
+            border: 1px solid #222;
+            width: 300px;
+            transition: .4s;
+            text-align: center;
+        }
+
+        .package-card:hover {
+            transform: translateY(-10px);
+            border-color: #ff6600;
+        }
+
+        .package-card.featured {
+            border-color: #ff6600;
+            position: relative;
+        }
+
+        .package-card h2 {
+            font-size: 26px;
+            margin-bottom: 15px;
+        }
+
+        .price {
+            font-size: 35px;
+            color: #ff6600;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .package-card ul {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 30px;
+        }
+
+        .package-card ul li {
+            margin-bottom: 12px;
+            color: #ccc;
+        }
+
+        .package-card button {
+            width: 100%;
+            padding: 12px;
+            border-radius: 25px;
+            border: 1px solid #ff6600;
+            background: transparent;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: .3s;
+        }
+
+        .package-card button:hover {
+            background: #ff6600;
+            box-shadow: 0 0 15px #ff6600;
+        }
+
+        /* REVIEWS */
+        .reviews {
+            padding: 80px 8%;
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .review-card {
+            background: #111;
+            padding: 30px;
+            border-radius: 15px;
+            width: 320px;
+            border: 1px solid #222;
+        }
+
+        .stars {
+            color: #ff6600;
+            margin-bottom: 10px;
+        }
+
+        .review-card p {
+            font-style: italic;
+            color: #ccc;
+        }
+
+        .review-card h3 {
+            font-size: 16px;
+            margin-top: 15px;
+            color: #ff6600;
+        }
+
+        /* CONTACT BUTTONS */
+        .contact {
+            padding: 100px 8%;
+            text-align: center;
+            background: #080808;
+        }
+
+        .contact-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .contact-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 35px;
+            border-radius: 40px;
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+            border: 1px solid #222;
+            background: #111;
+            transition: all 0.3s ease;
+        }
+
+        .contact-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+            transition: transform 0.3s ease;
+        }
+
+        .contact-btn.wa-btn:hover {
+            background: #25d366;
+            border-color: #25d366;
+            box-shadow: 0 0 25px rgba(37, 211, 102, 0.4);
+            animation: btnShake 0.5s ease infinite alternate;
+        }
+
+        .contact-btn.ig-btn:hover {
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            border-color: #dc2743;
+            box-shadow: 0 0 25px rgba(220, 39, 67, 0.4);
+            animation: btnShake 0.5s ease infinite alternate;
+        }
+
+        .contact-btn.fb-btn:hover {
+            background: #1877f2;
+            border-color: #1877f2;
+            box-shadow: 0 0 25px rgba(24, 119, 242, 0.4);
+            animation: btnShake 0.5s ease infinite alternate;
+        }
+
+        .contact-btn:hover svg {
+            transform: scale(1.15);
+        }
+
+        @keyframes btnShake {
+            0% { transform: translateY(-3px) rotate(-1deg); }
+            100% { transform: translateY(-3px) rotate(1deg); }
+        }
+
+        footer {
+            padding: 50px 8%;
+            text-align: center;
+            background: #050505;
+            border-top: 1px solid #111;
+        }
+
+        footer p {
+            color: #666;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .whatsapp {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #25d366;
+            width: 60px;
+            height: 60px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 30px;
+            z-index: 999;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: 0.3s;
+        }
+
+        .whatsapp:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 25px rgba(37, 211, 102, 0.5);
+        }
+
+        /* SCROLL REVEAL EFFECT */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 15px 5%;
+            }
+            nav a {
+                margin-left: 15px;
+                font-size: 14px;
+            }
+            .hero h1 {
+                font-size: 40px;
+            }
+            .hero p {
+                font-size: 18px;
+            }
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .about-me {
+                flex-direction: column;
+                text-align: center;
+                padding: 60px 8%;
+            }
+            .about-img-wrapper {
+                width: 280px;
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- LOADER -->
+    <div id="loader">
+        <img src="logo.png">
+    </div>
+
+    <!-- NAVBAR -->
+    <nav>
+        <img src="logo.png" class="logo">
+        <div>
+            <a href="#">Home</a>
+            <a href="#about">About</a>
+            <a href="#portfolio">Portfolio</a>
+            <a href="#services">Services</a>
+            <a href="#packages">Packages</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <video autoplay muted loop>
+            <source src="videos/hero.mp4">
+        </video>
+        <div class="overlay"></div>
+        <div class="hero-content">
+            <h1>Turning Ideas Into <br><span>Scroll-Stopping Videos</span></h1>
+            <p>Reels • Brand Content • Ads | Powered by CapCut Pro</p>
+            <a href="#portfolio" class="btn">View Portfolio</a>
+            <a href="#contact" class="btn">Get Quote</a>
+        </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="stats">
+        <div class="stat-box">
+            <h2>1+ Year</h2>
+            <p>Active Experience</p>
+        </div>
+        <div class="stat-box">
+            <h2>50+</h2>
+            <p>Trendy Videos Delivered</p>
+        </div>
+        <div class="stat-box">
+            <h2>CapCut Pro</h2>
+            <p>Advanced Workflow</p>
+        </div>
+        <div class="stat-box">
+            <h2>100%</h2>
+            <p>Scroll-Stopping Quality</p>
+        </div>
+    </section>
+
+    <!-- ABOUT ME -->
+    <section class="about-me reveal" id="about">
+        <div class="about-img-container">
+            <div class="about-img-wrapper">
+                <!-- 📸 OYAAGE NEW EDIT PHOTO EKA METHANATA ENNE -->
+                <img class="profile-pic" src="my-photo.jpg" alt="Sadeepa - Video Editor">
+                
+                <!-- 🌟 REAL GLOWING & ANIMATED CAPCUT BADGE -->
+                <div class="capcut-badge">
+                    <!-- CapCut PNG Real Icon -->
+                    <img class="capcut-icon" src="capcut.png" alt="CapCut Pro">
+                    CapCut Pro Expert
+                </div>
+            </div>
+        </div>
+        <div class="about-content">
+            <h3>Meet the Editor</h3>
+            <h2>I'm Sadeepa, the Creative Mind behind SD Creations.</h2>
+            <p>
+                I professionally edit videos using CapCut Pro's latest advanced tools and features. My specialty lies in creating "scroll-stopping" Reels, branded content, and high-converting ads that align with current social media trends—incorporating elements such as trending effects, dynamic captions, and fast-paced cuts.
+            </p>
+            <a href="#portfolio" class="btn">My Projects</a>
+        </div>
+    </section>
+
+    <!-- PORTFOLIO -->
+    <section class="portfolio reveal" id="portfolio">
+        <h1 class="section-title">Featured Work</h1>
+        <div class="filter">
+            <button>All</button>
+            <button>Reels</button>
+            <button>Brand Content</button>
+            <button>Advertising</button>
+        </div>
+
+        <div class="video-grid">
+            <div class="video-card">
+                <video muted loop>
+                    <source src="videos/bst-agri.mp4">
+                </video>
+                <h3>BST Class</h3>
+                <p>Social Media Reel</p>
+            </div>
+
+            <div class="video-card">
+                <video muted loop>
+                    <source src="videos/alfasoft1.mp4">
+                </video>
+                <h3>Alfasoft Company</h3>
+                <p>Advertising Video</p>
+            </div>
+
+            <div class="video-card">
+                <video muted loop>
+                    <source src="videos/jpn.mp4">
+                </video>
+                <h3>Japan Class</h3>
+                <p>Social Media Reel</p>
+            </div>
+               
+            <div class="video-card">
+                <video muted loop>
+                    <source src="videos/Alfasoft 3.mp4">
+                </video>
+                <h3>Alfasoft Company 2</h3>
+                <p>Advertising Video</p>
+            </div>
+
+            <div class="video-card">
+                <video muted loop>
+                    <source src="videos/Alfasoft 2.mp4">
+                </video>
+                <h3>Alfasoft Company 3</h3>
+                <p>Advertising Video</p>
+            </div>
+
+
+
+            <div class="video-card">
+                <video muted loop>
+                    <source src="videos/Alfasoft 4.mp4">
+                </video>
+                <h3>Alfasoft Company 4</h3>
+                <p>Advertising Video</p>
+            </div>
+
+            <div class="video-card">
+                <video muted loop>
+                    <source src="videos/Alfasoft 5.mp4">
+                </video>
+                <h3>Alfasoft Company 5</h3>
+                <p>Advertising Video</p>
+            </div>
+
+            <div class="video-card">
+                <video muted loop>
+                    <source src="videos/Alfasoft 6.mp4">
+                </video>
+                <h3>Alfasoft Company 6</h3>
+                <p>Advertising Video</p>
+            </div>
+
+            <div class="video-card">
+                <video muted loop>
+                    <source src="videos/it lab.mp4">
+                </video>
+                <h3>IT LAB Computers</h3>
+                <p>Social Media Reel</p>
+            </div>
+
+            <div class="video-card">
+                <video muted loop>
+                    <source src="videos/BST Agri 2028.mp4">
+                </video>
+                <h3>BST Class 2</h3>
+                <p>Social Media Reel</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section class="services reveal" id="services">
+        <h1 class="section-title">Our Services</h1>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">🎬</div>
+                <h2>Reels Editing</h2>
+                <p>High quality short form videos designed for Instagram, TikTok and Facebook.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">📱</div>
+                <h2>Brand Content</h2>
+                <p>Creative videos that build your brand identity.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">📢</div>
+                <h2>Advertising Videos</h2>
+                <p>Professional ads that attract customers and increase engagement.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PACKAGES -->
+    <section class="packages reveal" id="packages">
+        <h1 class="section-title">Video Editing Packages</h1>
+        <div class="packages-grid">
+            <div class="package-card">
+                <h2>Basic</h2>
+                <div class="price">Rs.1,500/=</div>
+                <ul>
+                    <li>✔ Up to 15-30 Seconds</li>
+                    <li>✔ Basic Editing</li>
+                    <li>✔ Text & Captions</li>
+                    <li>✔ Music Sync</li>
+                    <li>✔ Basic Animations</li>
+                </ul>
+                <button onclick="orderPackage('Basic Package (Rs.1,500/=)')">Get Started</button>
+            </div>
+
+            <div class="package-card featured">
+                <h2>Advanced</h2>
+                <div class="price">Rs.2,900/=</div>
+                <ul>
+                    <li>✔ Up to 30-60 Seconds</li>
+                    <li>✔ Background</li>
+                    <li>✔ GFX Sound</li>
+                    <li>✔ Color Correction</li>
+                    <li>✔ Animations</li>
+                    <li>✔ Effects</li>
+                </ul>
+                <button onclick="orderPackage('Advanced Package (Rs.2,900/=)')">Get Started</button>
+            </div>
+
+            <div class="package-card">
+                <h2>Pro</h2>
+                <div class="price">Rs.5,000/=</div>
+                <ul>
+                    <li>✔ Up to 60-90 Seconds</li>
+                    <li>✔ Premium Editing</li>
+                    <li>✔ Colour Grading</li>
+                    <li>✔ Advanced Effects</li>
+                    <li>✔ Transitions</li>
+                    <li>✔ Pro Animations</li>
+                    <li>✔ Instant Delivery</li>
+                </ul>
+                <button onclick="orderPackage('Pro Package (Rs.5,000/=)')">Get Started</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- REVIEWS -->
+    <section class="reviews reveal">
+        <div class="review-card">
+            <div class="stars">★★★★★</div>
+            <p>"Professional editing quality and amazing creativity."</p>
+            <h3>- Client Review</h3>
+        </div>
+        <div class="review-card">
+            <div class="stars">★★★★★</div>
+            <p>"Fast delivery and excellent social media content."</p>
+            <h3>- Brand Owner</h3>
+        </div>
+        <div class="review-card">
+            <div class="stars">★★★★★</div>
+            <p>"Helped our business create better online presence."</p>
+            <h3>- Customer</h3>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact reveal" id="contact">
+        <h1 class="section-title">Let's Create Something Amazing</h1>
+        <br><br>
+        
+        <div class="contact-container">
+            <a class="contact-btn wa-btn" target="_blank" href="https://wa.me/94725053770">
+                <svg viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.42 9.863-9.864.001-2.637-1.03-5.114-2.904-6.991a9.782 9.782 0 0 0-6.963-2.895c-5.439 0-9.865 4.424-9.867 9.869-.001 1.768.477 3.491 1.393 5.04l-.993 3.627 3.714-.974zm11.23-7.258c-.309-.156-1.838-.906-2.126-1.01-.288-.104-.499-.156-.709.156-.21.314-.813 1.01-.996 1.217-.183.208-.365.234-.674.078-3.04-1.516-3.83-2.27-5.507-5.148-.28-.48.28-.445.8-.148.163.093.361.21.52.324.31.223.4.36.5.5.105.14.047.36-.027.514-.074.156-.709 1.706-.97 2.332-.254.608-.517.525-.709.515-.18-.01-.387-.01-.594-.01-.206 0-.543.078-.826.386-.283.308-1.08 1.055-1.08 2.574 0 1.519 1.103 2.984 1.257 3.191.154.208 2.17 3.313 5.258 4.646.734.317 1.308.507 1.757.65.738.234 1.41.2 1.942.121.593-.088 1.838-.751 2.095-1.479.258-.729.258-1.353.181-1.482-.077-.128-.288-.208-.596-.364z"/></svg>
+                WhatsApp
+            </a>
+            <a class="contact-btn ig-btn" target="_blank" href="https://instagram.com/sd_creations">
+                <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204 0.13-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+                Instagram
+            </a>
+            <a class="contact-btn fb-btn" target="_blank" href="https://web.facebook.com/sadeepa.dissanayaka.7">
+                <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                Facebook
+            </a>
+        </div>
+    </section>
+
+    <footer>
+        <h2>SD Creations</h2>
+        <p>Video Editor • Content Creator</p>
+        <p>© 2026 SD Creations. All Rights Reserved.</p>
+    </footer>
+
+    <!-- FLOATING WHATSAPP BUTTON -->
+    <a class="whatsapp" target="_blank" href="https://wa.me/94725053770">💬</a>
+
+    <script>
+        // LOADER
+        window.onload = function () {
+            setTimeout(() => {
+                document.getElementById("loader").style.opacity = "0";
+                setTimeout(() => {
+                    document.getElementById("loader").style.display = "none";
+                }, 800);
+            }, 1500)
+        }
+
+        // VIDEO HOVER
+        document.querySelectorAll(".video-card video").forEach(video => {
+            video.addEventListener("mouseenter", () => { video.play(); })
+            video.addEventListener("mouseleave", () => { video.pause(); })
+        })
+
+        // VIDEO POPUP
+        document.querySelectorAll(".video-card video").forEach(video => {
+            video.onclick = function () {
+                let popup = document.createElement("div");
+                popup.className = "video-popup";
+                popup.innerHTML = `
+                    <div class="close-popup">✕</div>
+                    <video controls autoplay>
+                        <source src="${video.querySelector("source").src}">
+                    </video>
+                `;
+                document.body.appendChild(popup);
+                popup.querySelector(".close-popup").onclick = () => { popup.remove(); }
+            }
+        })
+
+        // PACKAGE ORDER ACTION
+        function orderPackage(packageName) {
+            let phoneNumber = "94725053770";
+            let message = encodeURIComponent(`Hello SD Creations, I am interested in your ${packageName}. I want to get started!`);
+            let whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
+            
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // SCROLL REVEAL ANIMATION
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 100;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                } else {
+                    reveals[i].classList.remove("active");
+                }
+            }
+        }
+        window.addEventListener("scroll", reveal);
+        reveal();
+    </script>
+</body>
+</html>
